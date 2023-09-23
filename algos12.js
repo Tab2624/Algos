@@ -22,6 +22,19 @@ var expected2 = 0;
  */
 function maxProfit(prices) {}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // =======================================================================================================
 
 /*
@@ -40,4 +53,18 @@ var expected = [2, 1, 0];
  * @param {string[]} string to search for
  * @return {number[]} number of instances of each query string
  */
-function matchingStrings(stringList, queries) {}
+function matchingStrings(stringList, queries) {
+  number = []
+  for (var j = 0; j<queries.length; j++){
+    var num = 0
+    for(var i = 0; i<stringList.length; i++){
+      if(queries[j] == stringList[i]){
+        num++
+      }
+    }
+    number.push(num)
+  }
+  return number
+}
+
+console.log(matchingStrings(stringList1, queries1))
