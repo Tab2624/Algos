@@ -174,6 +174,245 @@ class SinglyLinkedList {
         }
         return sum / count;
     }
+    /**
+     * Removes the last node of this list.
+     * - Time: O(n) linear, n = length of list.
+     * - Space: O(1) constant.
+     * @returns {any} The data from the node that was removed.
+     */
+    removeBack() {
+        // Your code here!
+        // Note: Be sure to handle any edge cases and to return the data of the node we've removed.
+        //start by creating a runner to find the tail of the list
+        if (this.isEmpty()) {
+            return null;
+        }
+        if (this.head.next == null) {
+            return this.removeHead();
+        }
+        let runner = this.head;
+
+        while (runner.next.next != null) {
+            runner = runner.next;
+        }
+        let removedData = runner.next;
+        runner.next = null;
+        return removedData.data;
+    }
+
+    /**
+     * Determines whether or not the given search value exists in this list.
+     * - Time: O(n) linear, n = length of list.
+     * - Space: O(1) constant.
+     * @param {any} val The data to search for in the nodes of this list.
+     * @returns {boolean}
+     */
+    contains(val) {
+        // Your code here!
+        let runner = this.head;
+        while (runner) {
+            if (runner.data == val) {
+                return true;
+            }
+            runner = runner.next;
+        }
+        return false;
+    }
+
+    /**
+     * Determines whether or not the given search value exists in this list.
+     * - Time: O(n) linear, n = length of list.
+     * - Space: O(n) linear due to the call stack.
+     * @param {any} val The data to search for in the nodes of this list.
+     * @param {?node} current The current node during the traversal of this list
+     *    or null when the end of the list has been reached.
+     * @returns {boolean}
+     */
+    containsRecursive(val, current = this.head) {
+        // Your code here!
+        if (current == null) {
+            return false;
+        }
+        if (current.data == val) {
+            return true;
+        }
+
+        return this.containsRecursive(val, current.next);
+    }
+
+    /**
+     * Retrieves the data of the second to last node in this list.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @returns {any} The data of the second to last node or null if there is no
+     *    second to last node.
+     */
+    secondToLast() {
+        if (this.isEmpty()) {
+            return null
+        }
+        if (this.head.next == null) {
+            return null
+        }
+        let runner = this.head
+
+        while (runner.next.next != null) {
+            runner = runner.next
+        }
+        return runner.data
+    }
+
+    /**
+     * Removes the node that has the matching given val as it's data.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {any} val The value to compare to the node's data to find the
+     *    node to be removed.
+     * @returns {boolean} Indicates if a node was removed or not.
+     */
+    removeVal(val) {
+        if (val == this.head.data) {
+            this.removeHead()
+            return true
+        }
+        let runner = this.head
+        while (runner.next !== null) {
+            if (runner.next.data == val) {
+                runner.next = runner.next.next
+                return true
+            }
+            runner = runner.next
+        }
+        return false
+    }
+
+    // EXTRA
+    /**
+     * Inserts a new node before a node that has the given value as its data.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {any} newVal The value to use for the new node that is being added.
+     * @param {any} targetVal The value to use to find the node that the newVal
+     *    should be inserted in front of.
+     * @returns {boolean} To indicate whether the node was pre-pended or not.
+     */
+    prepend(newVal, targetVal) {
+        if (this.isEmpty()) {
+            return false
+        }
+        if (targetVal == this.head.data) {
+            this.insertAtFront(newVal)
+            return true
+        }
+        let runner = this.head
+        while (runner.next !== null) {
+            if (runner.next.data == targetVal) {
+                const newNode = new ListNode(newVal)
+                newNode.next = runner.next
+                runner.next = newNode
+                return true
+            }
+            runner = runner.next
+        }
+        return false
+    }
+
+    /**
+ * Concatenates the nodes of a given list onto the back of this list.
+ * - Time: O(n) n = "this" list length -> O(n) linear.
+ *    addList does not need to be looped over.
+ * - Space: O(1) constant, although this list grows by addList's length,
+ *    our algo doesn't create extra objects or arrays to take up more space.
+ * @param {SinglyLinkedList} addList An instance of a different list whose
+ *    whose nodes will be added to the back of this list.
+ * @returns {SinglyLinkedList} This list with the added nodes.
+ */
+    concat(addList) {
+        if (addList.isEmpty()) {
+            return this;
+        }
+        let runner = addList.head;
+        while (runner !== null) {
+            this.insertAtBack(runner.data);
+            runner = runner.next
+        }
+        return this;
+
+        // Your Code Here
+        // Note: The List we're adding is another Singly Linked List that will be attached to the end of our original SLL. 
+    }
+
+    /**
+ * Finds the node with the smallest number as data and moves it to the front
+ * of this list.
+ * - Time: O(2n) n = list length -> O(n) linear,
+ *    2nd loop could go to end if min is at end.
+ * - Space: O(1) constant.
+ * @returns {SinglyLinkedList} This list.
+ */
+    moveMinFront() {
+        let min = this.head;
+        let runner = this.head;
+        while (runner !== null) {
+            if (runner.data < min.data) {
+                min = runner;
+            }
+            runner = runner.next;
+        }
+        if (this.head == min) {
+            return this;
+        }
+        this.removeVal(min.data);
+        this.insertAtFront(min.data);
+        return this;
+        // Your Code Here
+        // Hint: When looking for our min, we want to be sure we're moving the node and not just the data.
+        // Note: Regarding edge cases, we want to check if the min value is already the head. Then we'll just want our original list returned.
+    }
+
+
+    // EXTRA
+    /**
+ * Splits this list into two lists where the 2nd list starts with the node
+ * that has the given value.
+ * splitOnVal(5) for the list (1=>3=>5=>2=>4) will change list to (1=>3),
+ * and the return value will be a new list containing (5=>2=>4)
+ * - Time: O(n) linear, n = list length, could split on last node.
+ * - Space: O(1) constant.
+ * @param {any} val The value in the node that the list should be split on.
+ * @returns {SinglyLinkedList} The split list containing the nodes that are
+ *    no longer in this list.
+ */
+    splitOnVal(val) {
+        const newList = new SinglyLinkedList();
+
+        if (this.isEmpty()) {
+            return newList;
+        }
+        // Edge case if the value is found at the head, we'll just migrate the current list to the new list object and set the existing SLL head to null.
+        if (this.head.data === val) {
+            newList.head = this.head;
+            this.head = null;
+            return newList;
+        }
+
+        let runner = this.head;
+
+        while (runner.next) {
+            // Find the node that matches our value. 
+            if (runner.next.data === val) {
+                // Set the head of our new instance to the found node.
+                newList.head = runner.next;
+                // Set the current runner's next value to null to break the links.
+                runner.next = null;
+                // Return the new list, with it's nodes still intact as nested objects.
+                return newList;
+            }
+            runner = runner.next;
+        }
+        return newList;
+    }
 }
+
 // *******************************************************************
 // Test Code Here ~ ☕
