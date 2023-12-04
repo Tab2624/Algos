@@ -44,7 +44,11 @@ class BinarySearchTree {
    * - Space: O(?).
    * @returns {boolean} Indicates if this tree is empty.
    */
-  isEmpty() {}
+  isEmpty() {
+    if(this.root === null){
+      return true 
+    }
+  }
 
   /**
    * Retrieves the smallest integer data from this tree.
@@ -54,7 +58,15 @@ class BinarySearchTree {
    *    the tree is being traversed.
    * @returns {number} The smallest integer from this tree.
    */
-  min(current = this.root) {}
+  min(current = this.root) {
+    if(this.isEmpty()){
+      return null
+    }
+    while(current.left != null ){
+      current = current.left
+    } 
+    return current.data
+  }
   /**
    * Retrieves the smallest integer data from this tree.
    * - Time: O(?).
@@ -63,7 +75,15 @@ class BinarySearchTree {
    *    the tree is being traversed.
    * @returns {number} The smallest integer from this tree.
    */
-  minRecursive(current = this.root) {}
+  minRecursive(current = this.root) {
+    if(current == null){
+      return null
+    }
+    if(current.left == null){
+      return current.data
+    }
+    return this.minRecursive(current.left)
+  }
 
   /**
    * Retrieves the largest integer data from this tree.
@@ -73,7 +93,16 @@ class BinarySearchTree {
    *    the tree is being traversed.
    * @returns {number} The largest integer from this tree.
    */
-  max(current = this.root) {}
+  max(current = this.root) {
+    if(this.isEmpty()){
+      return null
+    }
+    while(current.right != null){
+      current = current.right 
+    }
+    return current.data
+  }
+  
 
   /**
    * Retrieves the largest integer data from this tree.
@@ -83,7 +112,15 @@ class BinarySearchTree {
    *    the tree is being traversed.
    * @returns {number} The largest integer from this tree.
    */
-  maxRecursive(current = this.root) {}
+  maxRecursive(current = this.root) {
+    if(current == null){
+      return null
+    }
+    if(current.right == null){
+      return current.data
+    }
+    return this.maxRecursive(current.right)
+  }
 
   // Logs this tree horizontally with the root on the left.
   print(node = this.root, spaceCnt = 0, spaceIncr = 10) {
@@ -161,3 +198,8 @@ threeLevelTree.root.right.left = new BSTNode(13);
 //   .insert(44)
 //   .insert(66)
 //   .insert(90);
+// console .log(threeLevelTree.min())
+// console .log(threeLevelTree.max())
+// console .log(emptyTree.min())
+console .log(threeLevelTree.minRecursive())
+console .log(threeLevelTree.maxRecursive())
